@@ -1,1 +1,3 @@
 .DS_Store
+.argocd-port-forward.pid
+.argocd-port-forward.log

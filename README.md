@@ -9,9 +9,12 @@ Repo: https://github.com/ToontjeM/gitops
 ## Layout
 
 - `00-provision.sh` — creates the `kind` cluster, installs the CNPG
-  operator, installs ArgoCD, and registers the `postgres-cluster`
-  Application (manual sync — nothing deployed yet).
-- `99-deprovision.sh` — deletes the `kind` cluster.
+  operator, installs ArgoCD (admin password set to `admin` — demo
+  convenience, never do this on a real cluster), registers the
+  `postgres-cluster` Application (manual sync — nothing deployed yet), and
+  starts a background port-forward so the ArgoCD UI is immediately reachable.
+- `99-deprovision.sh` — stops that port-forward and deletes the `kind`
+  cluster.
 - `kind-config.yaml` — 1 control-plane + 3 worker node topology, so the
   3-instance Postgres cluster below can spread across separate nodes.
 - `argocd/application.yaml` — the ArgoCD `Application` pointing at this
@@ -33,30 +36,25 @@ push → click Sync (or `argocd app sync postgres-cluster`) → watch it apply.
 ./00-provision.sh
 ```
 
-This gives you: a running kind cluster, the CNPG operator, ArgoCD, and an
-ArgoCD `Application` registered against this repo — but nothing deployed to
-`postgres-demo` yet, since sync is manual.
+This gives you a ready-to-demo environment:
 
-Push this repo to GitHub first (ArgoCD needs to be able to clone it):
+- kind cluster + CNPG operator installed
+- ArgoCD installed, reachable at **https://localhost:8080**
+  (user `admin` / password `admin`)
+- the `postgres-cluster` Application registered against this repo — nothing
+  deployed to `postgres-demo` yet, since sync is manual
 
-```
-git push -u origin main
-```
-
-Then open the ArgoCD UI and sync:
+If you've made changes, push them first so ArgoCD can see them:
 
 ```
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-open https://localhost:8080          # user: admin
-kubectl -n argocd get secret argocd-initial-admin-secret \
-  -o jsonpath='{.data.password}' | base64 -d; echo
+git push origin main
 ```
 
-Click **Sync** on the `postgres-cluster` Application, or via CLI:
+Open https://localhost:8080, log in, and click **Sync** on the
+`postgres-cluster` Application (or via CLI: `argocd login localhost:8080`
+then `argocd app sync postgres-cluster`). Watch it come up:
 
 ```
-argocd login localhost:8080
-argocd app sync postgres-cluster
 kubectl get cluster -n postgres-demo -w
 ```
 
