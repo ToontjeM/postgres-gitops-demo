@@ -9,7 +9,7 @@ spec:
   # Open source PostgreSQL operand, maintained by the CloudNativePG project.
   imageName: ghcr.io/cloudnative-pg/postgresql:17.6
 
-  instances: 4
+  instances: 3
   primaryUpdateStrategy: unsupervised
 
   storage:
