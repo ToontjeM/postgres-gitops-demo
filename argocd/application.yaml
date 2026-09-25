@@ -4,7 +4,8 @@
 # ArgoCD UI/CLI (this demo uses manual sync, not automated, so changes only
 # land when you trigger them).
 #
-# This repo (gitops) is demo tooling, clone/pull-only for everyone but Ton.
+# This repo (postgres-gitops-demo) is demo tooling, clone/pull-only for
+# everyone but Ton.
 # The repo this Application points at is a SEPARATE, personal repo — full
 # access for whoever ran 00-provision.sh — holding ONLY the contents of
 # this checkout's manifests/ directory, kept in sync via

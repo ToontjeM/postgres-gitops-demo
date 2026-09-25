@@ -4,21 +4,22 @@ Demonstrates managing a PostgreSQL cluster on Kubernetes with GitOps, using
 [CloudNativePG](https://cloudnative-pg.io) (CNPG) as the operator, ArgoCD as
 the GitOps controller, and a `kind` cluster as the local target environment.
 
-Repo: https://github.com/ToontjeM/gitops
+Repo: https://github.com/ToontjeM/postgres-gitops-demo
 
 ## Two repos
 
 This demo spans two separate repos, on purpose:
 
-- **This repo (`gitops`)** — the demo tooling: scripts, README, kind
-  config, the ArgoCD `Application` bootstrap manifest. Everyone clones or
-  pulls this; only Ton can push to it.
-- **A personal `postgres-gitops-demo` repo**, created in *your own* GitHub
-  account with full read/write access for you, holding *only* the
-  contents of `manifests/` — the CNPG `Cluster` and its `Namespace`. This
-  is the repo ArgoCD actually syncs against, since it needs something you
-  can push to, and it should track just the cluster manifest, not the
-  rest of the demo.
+- **This repo (`postgres-gitops-demo`)** — the demo tooling: scripts,
+  README, kind config, the ArgoCD `Application` bootstrap manifest.
+  Everyone clones or pulls this; only Ton can push to it.
+- **A personal manifests repo** (default name `postgres-gitops-manifests`,
+  suffixed if that's taken), created in *your own* GitHub account with
+  full read/write access for you, holding *only* the contents of
+  `manifests/` — the CNPG `Cluster` and its `Namespace`. This is the repo
+  ArgoCD actually syncs against, since it needs something you can push
+  to, and it should track just the cluster manifest, not the rest of the
+  demo.
 
 ## Running this yourself
 
@@ -37,7 +38,7 @@ time you run it:
    > Create a public GitHub repo under your account for just the cluster
    > manifest, using `gh`? [y/N]
 
-   - **Yes** — it creates a new, empty public repo (`postgres-gitops-demo`)
+   - **Yes** — it creates a new, empty public repo (`postgres-gitops-manifests`)
      on your GitHub account via `gh repo create`, adds it as the local
      `manifests` remote, and pushes *only* the contents of `manifests/`
      into it as `main` (via `git subtree push --prefix=manifests`) — not

@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 #
 # Provisions the demo environment. There are two repos in play:
-#   - this repo (gitops) — the demo tooling. Everyone clones/pulls it;
-#     only Ton can push to it. This script never touches its 'origin'.
-#   - a personal "postgres-gitops-demo" repo, created in YOUR GitHub
+#   - this repo (postgres-gitops-demo) — the demo tooling. Everyone
+#     clones/pulls it; only Ton can push to it. This script never touches
+#     its 'origin'.
+#   - a personal "postgres-gitops-manifests" repo, created in YOUR GitHub
 #     account with full access for you, holding only the contents of
 #     manifests/ (not the rest of this demo). ArgoCD tracks that repo, and
 #     you push to it via a local remote named 'manifests'.
@@ -80,9 +81,10 @@ MANIFESTS_URL="$(git -C "${SCRIPT_DIR}" remote get-url "${MANIFESTS_REMOTE}" 2>/
 if [[ -z "${MANIFESTS_URL}" ]]; then
   cat <<EOF
 
-No '${MANIFESTS_REMOTE}' remote is configured yet. This repo (gitops) is
-demo tooling you can only pull from — ArgoCD needs a separate repo you
-have full push access to, holding only the cluster manifest.
+No '${MANIFESTS_REMOTE}' remote is configured yet. This repo
+(postgres-gitops-demo) is demo tooling you can only pull from — ArgoCD
+needs a separate repo you have full push access to, holding only the
+cluster manifest.
 EOF
   read -r -p "Create a public GitHub repo under your account for just the cluster manifest, using 'gh'? [y/N] " CREATE_REPO_REPLY
   if [[ ! "${CREATE_REPO_REPLY}" =~ ^[Yy]$ ]]; then
@@ -94,9 +96,9 @@ EOF
   fi
 
   GH_USER="$(gh api user -q .login)"
-  REPO_NAME="postgres-gitops-demo"
+  REPO_NAME="postgres-gitops-manifests"
   if gh repo view "${GH_USER}/${REPO_NAME}" >/dev/null 2>&1; then
-    REPO_NAME="postgres-gitops-demo-$(date +%s)"
+    REPO_NAME="postgres-gitops-manifests-$(date +%s)"
   fi
 
   echo "==> Creating GitHub repo '${GH_USER}/${REPO_NAME}'"
