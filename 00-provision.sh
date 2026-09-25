@@ -52,7 +52,7 @@ if [[ "${#MISSING_TOOLS[@]}" -gt 0 ]]; then
   exit 1
 fi
 
-if ! git subtree --help >/dev/null 2>&1; then
+if git subtree 2>&1 | grep -q "is not a git command"; then
   echo "    error: 'git subtree' isn't available (needed to push only manifests/,"
   echo "    not the whole demo, to your personal repo). It ships with most git"
   echo "    distributions (e.g. Homebrew git, most Linux distro packages) but not"
