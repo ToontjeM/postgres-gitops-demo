@@ -55,7 +55,7 @@ Open https://localhost:8080, log in, and click **Sync** on the
 then `argocd app sync postgres-cluster`). Watch it come up:
 
 ```
-kubectl get cluster -n postgres-demo -w
+watch -n 1 -c kubectl cnpg get cluster -n postgres-demo --color always
 ```
 
 Tear everything down when done:
@@ -66,7 +66,7 @@ Tear everything down when done:
 
 ## Demo idea (next steps)
 
-With the baseline synced, drive the rest of the demo purely through git:
+With the baseline synced, drive the rest of the demo purely through github:
 scale `instances`, bump the `imageName` tag, change `resources`, etc. —
 commit, push, Sync in ArgoCD, and watch CNPG reconcile the running cluster
 to match.
