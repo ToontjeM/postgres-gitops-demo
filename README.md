@@ -132,7 +132,18 @@ in place and says so, it won't be deleted silently.
 
 ## Demo idea (next steps)
 
-With the baseline synced, drive the rest of the demo purely through github:
-scale `instances`, bump the `imageName` tag, change `resources`, etc. —
-commit, `git subtree push --prefix=manifests manifests main`, Sync in
-ArgoCD, and watch CNPG reconcile the running cluster to match.
+1. Push the cluster manifest to the newly created repo in your Github account using `git subtree push --prefix=manifests manifests main`
+2. Sync the manifest in ArgoCD
+![](images/step2.png)
+![](images/step2a.png)
+3. Open a terminal and run `watch -n 1 -c kubectl cnpg status -n postgres-demo pg-cluster --color allways`
+4. On Github, change `postgres-cluster.yaml` and commit. For example, change the number of instances from `3` to `4`
+5. Refresh ArgoCD and watch how the application is now out of sync.
+![](images/step5.png)
+6.  Click the `Diff` button and see what the differences are.
+![](images/step6.png)
+7. Sync the Application in ArgoCD
+![](images/step7.png)
+8. Watch in your cluster status how a new instance gets created.
+![](images/final.png)
+
