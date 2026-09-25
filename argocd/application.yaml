@@ -1,0 +1,23 @@
+# Bootstrap resource: registers this repo with ArgoCD so it manages
+# everything under manifests/. Applied once by 00-provision.sh; from then on
+# the Postgres cluster is deployed and evolved purely via git commits + a
+# manual Sync in the ArgoCD UI/CLI (this demo uses manual sync, not
+# automated, so changes only land when you trigger them).
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres-cluster
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/ToontjeM/gitops.git
+    targetRevision: main
+    path: manifests
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: postgres-demo
+
+  syncPolicy: {}
