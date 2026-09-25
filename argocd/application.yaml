@@ -4,14 +4,17 @@
 # ArgoCD UI/CLI (this demo uses manual sync, not automated, so changes only
 # land when you trigger them).
 #
-# The repo this points at holds ONLY the contents of this checkout's
-# manifests/ directory, synced to it via `git subtree push --prefix=manifests`
-# — not the whole demo (scripts, README, etc). That's why path is "." rather
-# than "manifests": in the tracked repo, the manifest files live at the root.
+# This repo (gitops) is demo tooling, clone/pull-only for everyone but Ton.
+# The repo this Application points at is a SEPARATE, personal repo — full
+# access for whoever ran 00-provision.sh — holding ONLY the contents of
+# this checkout's manifests/ directory, kept in sync via
+# `git subtree push --prefix=manifests manifests main`. That's why path is
+# "." rather than "manifests": in the tracked repo, the manifest files
+# live at the root.
 #
 # repoURL below is a placeholder — 00-provision.sh substitutes it with your
-# clone's own `git remote get-url origin` before applying, since ArgoCD
-# needs to sync against a repo you can actually push to. If you're applying
+# local 'manifests' remote's URL before applying, since ArgoCD needs to
+# sync against a repo you actually have push access to. If you're applying
 # this file by hand, replace __REPO_URL__ with your manifests repo's URL.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
