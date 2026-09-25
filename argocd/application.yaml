@@ -1,8 +1,18 @@
-# Bootstrap resource: registers this repo with ArgoCD so it manages
-# everything under manifests/. Applied once by 00-provision.sh; from then on
-# the Postgres cluster is deployed and evolved purely via git commits + a
-# manual Sync in the ArgoCD UI/CLI (this demo uses manual sync, not
-# automated, so changes only land when you trigger them).
+# Bootstrap resource: registers a repo with ArgoCD so it manages everything
+# in it. Applied once by 00-provision.sh; from then on the Postgres cluster
+# is deployed and evolved purely via git commits + a manual Sync in the
+# ArgoCD UI/CLI (this demo uses manual sync, not automated, so changes only
+# land when you trigger them).
+#
+# The repo this points at holds ONLY the contents of this checkout's
+# manifests/ directory, synced to it via `git subtree push --prefix=manifests`
+# — not the whole demo (scripts, README, etc). That's why path is "." rather
+# than "manifests": in the tracked repo, the manifest files live at the root.
+#
+# repoURL below is a placeholder — 00-provision.sh substitutes it with your
+# clone's own `git remote get-url origin` before applying, since ArgoCD
+# needs to sync against a repo you can actually push to. If you're applying
+# this file by hand, replace __REPO_URL__ with your manifests repo's URL.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -12,9 +22,9 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/ToontjeM/gitops.git
+    repoURL: __REPO_URL__
     targetRevision: main
-    path: manifests
+    path: .
 
   destination:
     server: https://kubernetes.default.svc
